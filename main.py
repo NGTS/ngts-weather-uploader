@@ -1,17 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-import requests
-
-
-session = requests.Session()
-
-ROOT_URL = 'http://archive.eso.org/wdb/wdb/eso/meteo_paranal/query'
+from query import Query
 
 
 def main():
-    pass
+    paranal_weather = Query.fetch_for_night()
 
 if __name__ == '__main__':
     main()
