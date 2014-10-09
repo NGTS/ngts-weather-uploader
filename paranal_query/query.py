@@ -56,7 +56,7 @@ COLUMN_DATA_CASTERS = {
 
 def query_for_night(night=None):
     payload = {
-        'night': night if night is not None else datetime.date.today(),
+        'night': str(night if night is not None else datetime.date.today()),
         'wdbo': 'csv/download',
         'max_rows_returned': 1000000,
     }
