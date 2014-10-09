@@ -8,6 +8,30 @@ ROOT_URL = 'http://archive.eso.org/wdb/wdb/eso/meteo_paranal/query'
 
 session = requests.Session()
 
+COLUMN_NAME_MAP = {
+    'Wind Speed Component U [m/s]': 'wind_speed_u',
+    'Normalised Pressure at sea level [hPa]': 'pressure_sea_level',
+    '0.5 micron Particule count at 30m [1/m^3]': 'particule_count_30m',
+    'Wind Direction at 10m [deg]': 'wind_direction_10m',
+    '0.5 micron Particule count at 20m [1/m^3]': 'particule_count_20m',
+    'Wind Speed Component V [m/s]': 'wind_speed_v',
+    'Ambient Temperature at 2m [C]': 'ambient_temp',
+    'Wind Speed Component W [m/s]': 'wind_speed_w',
+    'Night': 'night',
+    'Wind Speed at 10m [m/s]': 'wind_speed_10m',
+    'Measurement interval[s]': 'interval',
+    'Relative Humidity at 30m [%]': 'humidity_30m',
+    'Dew Temperature at 30m [C]': 'dewtemp_30m',
+    'Dew Temperature at 2m [C]': 'dewtemp_2m',
+    'Ground Temperature at -0.1m [C]': 'ground_temp',
+    'Air Pressure at 2m [hPa]': 'air_pressure_2m',
+    'Ambient Temperature at 30m [C]': 'ambient_temp_30m',
+    'Relative Humidity at 2m [%]': 'Humidity_2m',
+    'Wind Direction at 30m [deg]': 'wind_direction_30m',
+    '5.0 micron Particule count at 20m [1/m^3]': '5u_particule_count_20m',
+    '5.0 micron Particule count at 30m [1/m^3]': '5u_particule_count_30m',
+    'Wind Speed at 30m [m/s]': 'wind_speed_30m',
+}
 
 def query_for_night(night=None):
     payload = {
@@ -46,4 +70,10 @@ def parse_query_response(response_text):
         for key in row:
             out[key].append(row[key])
 
-    return out
+    return rename_columns(out)
+
+
+def rename_columns(data):
+    return {
+        COLUMN_NAME_MAP[key]: data[key] for key in data
+    }

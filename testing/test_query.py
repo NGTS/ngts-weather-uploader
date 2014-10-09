@@ -22,7 +22,9 @@ def test_query_for_night_status(query_response):
     assert query_response.status_code == 200
 
 
-def test_parse_response():
+@mock.patch('paranal_query.query.rename_columns',
+            side_effect=lambda value: value)
+def test_parse_response(mock_rename_columns):
     response_text = 'Night,value\n2014,10'
     assert parse_query_response(response_text)['value'] == ['10', ]
 
@@ -31,3 +33,17 @@ def test_clean_response():
     from paranal_query.query import clean_response
     text = 'foo\nNight\nbar\n2014\n'
     assert clean_response(text) == 'Night\n2014'
+
+
+def test_rename_columns():
+    from paranal_query.query import rename_columns
+
+    data = {
+        'Wind Speed Component U [m/s]': 1,
+        'Dew Temperature at 2m [C]': 2,
+    }
+
+    assert rename_columns(data) == {
+        'wind_speed_u': 1,
+        'dewtemp_2m': 2,
+    }
