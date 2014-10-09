@@ -1,2 +1,9 @@
+autopep8==1.0.4
+httpretty==0.8.3
+mock==1.0.1
 peewee==2.3.3
+pep8==1.5.7
+py==1.4.25
+pytest==2.6.3
 requests==2.4.3
+urllib3==1.7.1
