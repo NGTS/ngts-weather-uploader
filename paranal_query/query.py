@@ -47,8 +47,7 @@ def query_for_night(night=None):
         'tab_dus1', 'tab_dul1', 'tab_dus2', 'tab_dul2',
     ]
 
-    for field in fields:
-        payload[field] = True
+    payload.update({field: True for field in fields})
 
     return session.post(ROOT_URL, data=payload)
 
