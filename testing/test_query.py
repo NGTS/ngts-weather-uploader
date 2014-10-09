@@ -3,12 +3,14 @@ from paranal_query.query import (query_for_night,
 import datetime
 import pytest
 import mock
+import vcr
 
 
 @pytest.fixture(scope='session')
 def query_response():
     yesterday = datetime.date.today() - datetime.timedelta(days=1)
-    return query_for_night()
+    with vcr.use_cassette('testing/fixtures/night.yaml'):
+        return query_for_night()
 
 
 @pytest.fixture(scope='session')
