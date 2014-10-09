@@ -84,7 +84,7 @@ def parse_query_response(response_text):
     buffer = StringIO(cleaned_text)
     reader = csv.DictReader(buffer)
 
-    out = [row for row in reader]
+    out = (row for row in reader)
 
     return cast_data_types(rename_columns(out))
 
@@ -102,16 +102,12 @@ def cast_row(row):
 
 
 def cast_data_types(data):
-    return list(map(cast_row, data))
+    return map(cast_row, data)
 
 
 def rename_columns(data):
-    out = []
     for row in data:
-        out.append({
-            COLUMN_NAME_MAP[key]: row[key] for key in row
-        })
-    return out
+        yield {COLUMN_NAME_MAP[key]: row[key] for key in row}
 
 if __name__ == '__main__':
     import vcr
