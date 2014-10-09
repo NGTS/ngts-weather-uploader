@@ -31,12 +31,13 @@ def query_for_night(night=None):
 
 def clean_response(text):
     lines = text.split('\n')
-    return '\n'.join([line for line in lines[1:]
-                      if line])
+    print(lines)
+    return '\n'.join([line for line in lines
+                      if line.startswith('Night') or line.startswith('20')])
 
 
-def parse_query_response(response):
-    cleaned_text = clean_response(response.text)
+def parse_query_response(response_text):
+    cleaned_text = clean_response(response_text)
     buffer = StringIO(cleaned_text)
     reader = csv.DictReader(buffer)
 

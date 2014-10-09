@@ -21,12 +21,11 @@ def test_query_for_night_status(query_response):
 
 
 def test_parse_response():
-    r = mock.Mock()
-    r.text = 'value\n10\n'
-    assert parse_query_response(r)['value'] == ['10', ]
+    response_text = 'Night,value\n2014,10'
+    assert parse_query_response(response_text)['value'] == ['10', ]
 
 
 def test_clean_response():
     from paranal_query.query import clean_response
-    text = 'foo\nbar\n\nbaz\n'
-    assert clean_response(text) == 'bar\nbaz'
+    text = 'foo\nNight\nbar\n2014\n'
+    assert clean_response(text) == 'Night\n2014'
