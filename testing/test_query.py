@@ -26,7 +26,7 @@ def test_query_for_night_status(query_response):
             side_effect=lambda value: value)
 def test_parse_response(mock_rename_columns):
     response_text = 'Night,value\n2014,10'
-    assert parse_query_response(response_text)['value'] == ['10', ]
+    assert parse_query_response(response_text)['value'] == [10, ]
 
 
 def test_clean_response():
@@ -46,4 +46,17 @@ def test_rename_columns():
     assert rename_columns(data) == {
         'wind_speed_u': 1,
         'dewtemp_2m': 2,
+    }
+
+def test_cast_data_types():
+    from paranal_query.query import cast_data_types
+
+    data = {
+        'night': ['2014-10-09 12:00:33',],
+        'humidity_2m': ['0.3',],
+    }
+
+    assert cast_data_types(data) == {
+        'night': [datetime.datetime(2014, 10, 9, 12, 0, 33),],
+        'humidity_2m': [0.3,],
     }

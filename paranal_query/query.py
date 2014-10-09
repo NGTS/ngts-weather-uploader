@@ -26,11 +26,19 @@ COLUMN_NAME_MAP = {
     'Ground Temperature at -0.1m [C]': 'ground_temp',
     'Air Pressure at 2m [hPa]': 'air_pressure_2m',
     'Ambient Temperature at 30m [C]': 'ambient_temp_30m',
-    'Relative Humidity at 2m [%]': 'Humidity_2m',
+    'Relative Humidity at 2m [%]': 'humidity_2m',
     'Wind Direction at 30m [deg]': 'wind_direction_30m',
     '5.0 micron Particule count at 20m [1/m^3]': '5u_particule_count_20m',
     '5.0 micron Particule count at 30m [1/m^3]': '5u_particule_count_30m',
     'Wind Speed at 30m [m/s]': 'wind_speed_30m',
+}
+
+def to_datetime(s):
+    return datetime.datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
+
+COLUMN_DATA_CASTERS = {
+    'night': to_datetime,
+    'interval': int,
 }
 
 def query_for_night(night=None):
@@ -68,10 +76,32 @@ def parse_query_response(response_text):
         for key in row:
             out[key].append(row[key])
 
-    return rename_columns(out)
+    return cast_data_types(rename_columns(out))
+
+
+def cast_data_types(data):
+    out = {}
+    for key in data:
+        value = data[key]
+        if key in COLUMN_DATA_CASTERS:
+            casted_values = map(COLUMN_DATA_CASTERS[key], value)
+        else:
+            casted_values = map(float, value)
+
+        out[key] = list(casted_values)
+
+    return out
 
 
 def rename_columns(data):
     return {
         COLUMN_NAME_MAP[key]: data[key] for key in data
     }
+
+
+if __name__ == '__main__':
+    import vcr
+    with vcr.use_cassette('testing/fixtures/night.yaml'):
+        r = query_for_night()
+
+    data = parse_query_response(r.text)
