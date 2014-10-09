@@ -55,7 +55,6 @@ def query_for_night(night=None):
 
 def clean_response(text):
     lines = text.split('\n')
-    print(lines)
     return '\n'.join([line for line in lines
                       if line.startswith('Night') or line.startswith('20')])
 
