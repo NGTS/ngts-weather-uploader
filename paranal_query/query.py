@@ -34,8 +34,10 @@ COLUMN_NAME_MAP = {
     'Wind Speed at 30m [m/s]': 'wind_speed_30m',
 }
 
+
 def to_datetime(s):
     return datetime.datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
+
 
 def safe_cast(value, caster):
     try:
@@ -50,6 +52,7 @@ COLUMN_DATA_CASTERS = {
     'night': to_datetime,
     'interval': safe_int,
 }
+
 
 def query_for_night(night=None):
     payload = {
@@ -81,33 +84,34 @@ def parse_query_response(response_text):
     buffer = StringIO(cleaned_text)
     reader = csv.DictReader(buffer)
 
-    out = defaultdict(list)
-    for row in reader:
-        for key in row:
-            out[key].append(row[key])
+    out = [row for row in reader]
 
     return cast_data_types(rename_columns(out))
 
 
-def cast_data_types(data):
+def cast_row(row):
     out = {}
-    for key in data:
-        value = data[key]
+    for key in row:
+        value = row[key]
         if key in COLUMN_DATA_CASTERS:
-            casted_values = map(COLUMN_DATA_CASTERS[key], value)
+            casted_value = COLUMN_DATA_CASTERS[key](value)
         else:
-            casted_values = map(safe_float, value)
-
-        out[key] = list(casted_values)
-
+            casted_value = safe_float(value)
+        out[key] = casted_value
     return out
 
 
-def rename_columns(data):
-    return {
-        COLUMN_NAME_MAP[key]: data[key] for key in data
-    }
+def cast_data_types(data):
+    return list(map(cast_row, data))
 
+
+def rename_columns(data):
+    out = []
+    for row in data:
+        out.append({
+            COLUMN_NAME_MAP[key]: row[key] for key in row
+        })
+    return out
 
 if __name__ == '__main__':
     import vcr
