@@ -1,5 +1,8 @@
 import requests
 import datetime
+from io import StringIO
+import csv
+from collections import defaultdict
 
 ROOT_URL = 'http://archive.eso.org/wdb/wdb/eso/meteo_paranal/query'
 
@@ -24,3 +27,15 @@ def query_for_night(night=None):
         payload[field] = True
 
     return session.post(ROOT_URL, data=payload)
+
+
+def parse_query_response(response):
+    buffer = StringIO(response.text)
+    reader = csv.DictReader(buffer)
+
+    out = defaultdict(list)
+    for row in reader:
+        for key in row:
+            out[key].append(row[key])
+
+    return out
