@@ -29,8 +29,15 @@ def query_for_night(night=None):
     return session.post(ROOT_URL, data=payload)
 
 
+def clean_response(text):
+    lines = text.split('\n')
+    return '\n'.join([line for line in lines[1:]
+                      if line])
+
+
 def parse_query_response(response):
-    buffer = StringIO(response.text)
+    cleaned_text = clean_response(response.text)
+    buffer = StringIO(cleaned_text)
     reader = csv.DictReader(buffer)
 
     out = defaultdict(list)

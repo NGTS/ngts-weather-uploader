@@ -24,3 +24,9 @@ def test_parse_response():
     r = mock.Mock()
     r.text = 'value\n10\n'
     assert parse_query_response(r)['value'] == ['10', ]
+
+
+def test_clean_response():
+    from paranal_query.query import clean_response
+    text = 'foo\nbar\n\nbaz\n'
+    assert clean_response(text) == 'bar\nbaz'
