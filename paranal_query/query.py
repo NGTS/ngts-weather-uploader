@@ -3,6 +3,7 @@ import datetime
 from io import StringIO
 import csv
 from collections import defaultdict
+from functools import partial
 
 ROOT_URL = 'http://archive.eso.org/wdb/wdb/eso/meteo_paranal/query'
 
@@ -36,9 +37,18 @@ COLUMN_NAME_MAP = {
 def to_datetime(s):
     return datetime.datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
 
+def safe_cast(value, caster):
+    try:
+        return caster(value)
+    except ValueError:
+        return None
+
+safe_float = partial(safe_cast, caster=float)
+safe_int = partial(safe_cast, caster=int)
+
 COLUMN_DATA_CASTERS = {
     'night': to_datetime,
-    'interval': int,
+    'interval': safe_int,
 }
 
 def query_for_night(night=None):
@@ -86,7 +96,7 @@ def cast_data_types(data):
         if key in COLUMN_DATA_CASTERS:
             casted_values = map(COLUMN_DATA_CASTERS[key], value)
         else:
-            casted_values = map(float, value)
+            casted_values = map(safe_float, value)
 
         out[key] = list(casted_values)
 
