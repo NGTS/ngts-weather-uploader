@@ -24,8 +24,14 @@ def query_response(query_instance):
 
 
 @pytest.fixture
-def parsed(query_response):
-    return parse_query_response(query_response)
+def query_date_range(query_instance):
+    start_date = datetime.date(2011, 3, 15)
+    end_date = start_date + datetime.timedelta(days=2)
+
+    with cassette('weather_date_range.yml'):
+        response = query_instance.for_date_range(start_date, end_date)
+
+    return response
 
 
 def test_query_for_night_status(query_response):
@@ -72,4 +78,19 @@ def test_parse_response(monkeypatch, query_instance):
     monkeypatch.setattr(query_instance, 'rename_columns',
                         lambda value: value)
     response_text = 'Night,value\n2014,10'
-    assert list(query_instance.parse_query_response(response_text))[0]['value'] == 10
+    value = list(query_instance.parse_query_response(response_text))[
+        0]['value']
+    assert value == 10
+
+
+def test_date_range_response(query_date_range):
+    assert query_date_range.status_code == 200
+
+
+def test_date_range(query_instance, query_date_range):
+    from itertools import islice
+    parsed = query_instance.parse_query_response(query_date_range.text)
+    parsed_list = list(parsed)
+    first, last = parsed_list[0], parsed_list[-1]
+    assert first['night'].date() == datetime.date(2011, 3, 15)
+    assert last['night'].date() == datetime.date(2011, 3, 17)

@@ -52,6 +52,15 @@ class Query(object):
 
         return session.post(self.ROOT_URL, data=payload)
 
+    def for_date_range(self, start_date, end_date=None):
+        payload = self.PAYLOAD.copy()
+        payload['stime'] = str(start_date)
+        payload['starttime'] = '00'
+        payload['etime'] = str(end_date if end_date is not None
+                               else datetime.date.today())
+        payload['endtime'] = '24'
+        return session.post(self.ROOT_URL, data=payload)
+
     def cast_row(self, row):
         out = {}
         for key in row:
