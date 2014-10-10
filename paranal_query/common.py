@@ -12,6 +12,10 @@ def to_datetime(s):
     return datetime.datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
 
 
+def parse_date(s):
+    return datetime.datetime.strptime(s, '%Y-%m-%d').date()
+
+
 def safe_cast(value, caster):
     try:
         return caster(value)
