@@ -47,3 +47,10 @@ def test_cast_data_types(query_instance):
         'night': datetime.datetime(2014, 10, 9, 12, 0, 33),
         'airmass': 1.2,
     }]
+
+
+def test_parse_response(monkeypatch, query_instance):
+    monkeypatch.setattr(query_instance, 'rename_columns',
+                        lambda value: value)
+    response_text = 'Night,value\n2014,10'
+    assert list(query_instance.parse_query_response(response_text))[0]['value'] == 10
