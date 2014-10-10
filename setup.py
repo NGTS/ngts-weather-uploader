@@ -12,6 +12,7 @@ setup(
         'requests',
         'peewee',
         'python-dateutil',
+        'pw-database-url',
     ],
     entry_points={
         'console_scripts': [
