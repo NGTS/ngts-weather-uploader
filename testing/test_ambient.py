@@ -13,7 +13,7 @@ def query_instance():
 def query_response(query_instance):
     d = datetime.date(2011, 3, 15)
     with vcr.use_cassette('testing/fixtures/ambient.yaml'):
-        return query_instance.query_for_night(d)
+        return query_instance.for_night(d)
 
 
 def test_construction(query_instance):

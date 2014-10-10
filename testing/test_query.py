@@ -13,7 +13,7 @@ def query_instance():
 def query_response(query_instance):
     yesterday = datetime.date.today() - datetime.timedelta(days=1)
     with vcr.use_cassette('testing/fixtures/weather.yaml'):
-        return query_instance.query_for_night()
+        return query_instance.for_night()
 
 
 @pytest.fixture
