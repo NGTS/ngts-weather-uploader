@@ -1,19 +1,22 @@
-from paranal_query.query import (query_for_night,
-                                 parse_query_response)
+from paranal_query.query import Query
 import datetime
 import pytest
-import mock
 import vcr
 
 
-@pytest.fixture(scope='session')
-def query_response():
+@pytest.fixture
+def query_instance():
+    return Query('weather')
+
+
+@pytest.fixture
+def query_response(query_instance):
     yesterday = datetime.date.today() - datetime.timedelta(days=1)
     with vcr.use_cassette('testing/fixtures/night.yaml'):
-        return query_for_night()
+        return query_instance.query_for_night()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def parsed(query_response):
     return parse_query_response(query_response)
 
@@ -28,36 +31,33 @@ def test_clean_response():
     assert clean_response(text) == 'Night\n2014'
 
 
-def test_rename_columns():
-    from paranal_query.query import rename_columns
+def test_rename_columns(query_instance):
 
     data = [{
         'Wind Speed Component U [m/s]': 1,
         'Dew Temperature at 2m [C]': 2,
     }]
 
-    assert list(rename_columns(data)) == [{
+    assert list(query_instance.rename_columns(data)) == [{
         'wind_speed_u': 1,
         'dewtemp_2m': 2,
     }]
 
 
-def test_cast_data_types():
-    from paranal_query.query import cast_data_types
-
+def test_cast_data_types(query_instance):
     data = [{
         'night': '2014-10-09 12:00:33',
         'humidity_2m': '0.3',
     }]
 
-    assert list(cast_data_types(data)) == [{
+    assert list(query_instance.cast_data_types(data)) == [{
         'night': datetime.datetime(2014, 10, 9, 12, 0, 33),
         'humidity_2m': 0.3,
     }]
 
 
-@mock.patch('paranal_query.query.rename_columns',
-            side_effect=lambda value: value)
-def test_parse_response(mock_rename_columns):
+def test_parse_response(monkeypatch, query_instance):
+    monkeypatch.setattr(query_instance, 'rename_columns',
+                        lambda value: value)
     response_text = 'Night,value\n2014,10'
-    assert list(parse_query_response(response_text))[0]['value'] == 10
+    assert list(query_instance.parse_query_response(response_text))[0]['value'] == 10
