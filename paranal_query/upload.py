@@ -40,8 +40,9 @@ def upload_from_request(query, r):
     database.create_tables([Measurement], safe=True)
 
     data = query.parse_query_response(r.text)
-    for entry in data:
-        try:
-            Measurement.create(**entry)
-        except IntegrityError:
-            pass
+    with database.transaction():
+        for entry in data:
+            try:
+                Measurement.create(**entry)
+            except IntegrityError:
+                pass
