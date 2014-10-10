@@ -14,7 +14,7 @@ def to_datetime(s):
 
 
 def parse_date(s):
-    return dateutil_parse(s).date()
+    return dateutil_parse(s).date() if s is not None else None
 
 
 def safe_cast(value, caster):
