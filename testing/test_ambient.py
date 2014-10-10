@@ -22,3 +22,15 @@ def test_construction(query_instance):
 
 def test_query_for_night_status(query_response):
     assert query_response.status_code == 200
+
+def test_rename_columns(query_instance):
+
+    data = [{
+        'Tau0 [ms]': 1,
+        'DIMM Seeing ["]': 2,
+    }]
+
+    assert list(query_instance.rename_columns(data)) == [{
+        'tau0': 1,
+        'seeing': 2,
+    }]
