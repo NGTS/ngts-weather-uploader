@@ -8,7 +8,7 @@ else:
 import csv
 from .common import clean_response, safe_float, parse_date
 from .upload import upload_from_request
-
+from .logger import logger
 
 
 class Query(object):
@@ -19,6 +19,8 @@ class Query(object):
         self.query_type = query_type
         self.upload_data()
         self.session = requests.Session()
+
+        logger.info('Constructing `%s` query', self.query_type)
 
     def upload_data(self):
         if self.query_type.lower() == 'weather':
@@ -42,26 +44,27 @@ class Query(object):
         self.COLUMN_DATA_CASTERS = COLUMN_DATA_CASTERS
         self.PAYLOAD = PAYLOAD
 
-    @classmethod
-    def query_for_night(cls, query_type, night=None):
-        self = cls(query_type)
-        return self.for_night(night)
-
     def for_night(self, night=None):
+        night = night if night is not None else datetime.date.today()
         payload = self.PAYLOAD.copy()
-        payload['night'] = str(night if night is not None
-                               else datetime.date.today()),
+        payload['night'] = str(night),
+        logger.info('Querying for %s', night)
 
-        return self.session.post(self.ROOT_URL, data=payload)
+        return self.send_request(payload)
 
     def for_date_range(self, start_date, end_date=None):
+        end_date = end_date if end_date is not None else datetime.date.today()
+        logger.info('Querying from %s to %s', start_date, end_date)
         payload = self.PAYLOAD.copy()
         payload['stime'] = str(start_date)
         payload['starttime'] = '00'
-        payload['etime'] = str(end_date if end_date is not None
-                               else datetime.date.today())
+        payload['etime'] = str(end_date)
         payload['endtime'] = '24'
-        return self.session.post(self.ROOT_URL, data=payload)
+        return self.send_request(payload)
+
+    def send_request(self, data):
+        logger.debug('Sending web request to %s', self.ROOT_URL)
+        return self.session.post(self.ROOT_URL, data=data)
 
     def cast_row(self, row):
         out = {}
@@ -82,6 +85,7 @@ class Query(object):
             yield {self.COLUMN_NAME_MAP[key]: row[key] for key in row}
 
     def parse_query_response(self, response_text):
+        logger.debug('Parsing response')
         cleaned_text = clean_response(response_text)
         reader = csv.DictReader(StringIO(cleaned_text))
 
@@ -98,6 +102,11 @@ class Query(object):
         upload_from_request(self, response)
 
         return self
+
+    @classmethod
+    def query_for_night(cls, query_type, night=None):
+        self = cls(query_type)
+        return self.for_night(night)
 
     @classmethod
     def upload_from_args(cls, args):

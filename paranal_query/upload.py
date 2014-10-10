@@ -1,5 +1,6 @@
 import peewee
 import pw_database_url as db_uri
+from .logger import logger
 
 database_proxy = peewee.Proxy()
 
@@ -13,11 +14,13 @@ def build_database():
 
 
 def build_sqlite_database(config):
+    logger.debug('Connecting to sqlite database: %s', config['name'])
     from peewee import SqliteDatabase
     return SqliteDatabase(config['name'])
 
 
 def build_mysql_database(config):
+    logger.debug('Connecting to mysql database: %s', config['name'])
     from peewee import MySQLDatabase
     return MySQLDatabase(
         host=config['host'],
@@ -37,6 +40,7 @@ class Measurement(peewee.Model):
 
 
 def upload_from_request(query, r):
+    logger.debug('Initialising database tables')
     for column_name in query.COLUMN_NAME_MAP.values():
         if column_name == 'night':
             column = peewee.DateTimeField(null=False, index=True, unique=True)
