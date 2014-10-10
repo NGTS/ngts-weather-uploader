@@ -34,7 +34,7 @@ class Query(object):
                                   COLUMN_DATA_CASTERS,
                                   PAYLOAD)
 
-        else:
+        if self.query_type.lower() not in ['weather', 'ambient']:
             raise RuntimeError("Unknown query type: {}, options are "
                                "[weather,ambient]".format(
                                    self.query_type))
