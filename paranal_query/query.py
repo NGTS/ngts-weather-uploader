@@ -6,15 +6,11 @@ if sys.version_info.major >= 3:
 else:
     from StringIO import StringIO
 import csv
+from .common import clean_response
 
 
 session = requests.Session()
 
-
-def clean_response(text):
-    lines = text.split('\n')
-    return '\n'.join([line for line in lines
-                      if line.startswith('Night') or line.startswith('20')])
 
 
 class Query(object):
