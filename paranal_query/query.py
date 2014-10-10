@@ -40,6 +40,11 @@ class Query(object):
         self.COLUMN_DATA_CASTERS = COLUMN_DATA_CASTERS
         self.PAYLOAD = PAYLOAD
 
+    @classmethod
+    def query_for_night(cls, query_type, night=None):
+        self = cls(query_type)
+        return self.for_night(night)
+
     def for_night(self, night=None):
         payload = self.PAYLOAD.copy()
         payload['night'] = str(night if night is not None

@@ -30,6 +30,10 @@ def parsed(query_response):
 def test_query_for_night_status(query_response):
     assert query_response.status_code == 200
 
+def test_query_classmethod():
+    with cassette():
+        assert Query.query_for_night('weather').status_code == 200
+
 
 def test_clean_response():
     from paranal_query.query import clean_response
