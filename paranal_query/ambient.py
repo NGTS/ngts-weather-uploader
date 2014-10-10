@@ -5,7 +5,10 @@ ROOT_URL = 'http://archive.eso.org/wdb/wdb/eso/ambient_paranal/query'
 COLUMN_NAME_MAP = {
 }
 
-COLUMN_DATA_CASTERS = {}
+COLUMN_DATA_CASTERS = {
+    'night': to_datetime,
+    'interval': safe_int,
+}
 
 PAYLOAD = {
     'wdbo': 'csv/download',
