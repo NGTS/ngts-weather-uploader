@@ -1,4 +1,12 @@
-from peewee import *
+from peewee import (
+    DateTimeField,
+    FloatField,
+    IntegerField,
+    IntegrityError,
+    Model,
+    Proxy,
+    SqliteDatabase,
+)
 from paranal_query.query import COLUMN_NAME_MAP, parse_query_response
 
 database_proxy = Proxy()
@@ -6,13 +14,13 @@ database_proxy = Proxy()
 
 class BaseModel(Model):
 
-    class Meta:
+    class Meta(object):
         database = database_proxy
 
 
 class Measurement(BaseModel):
 
-    class Meta:
+    class Meta(object):
         db_table = 'paranal_weather'
 
 column_count = 0

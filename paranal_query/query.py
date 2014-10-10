@@ -6,7 +6,6 @@ if sys.version_info.major >= 3:
 else:
     from StringIO import StringIO
 import csv
-from collections import defaultdict
 from functools import partial
 
 ROOT_URL = 'http://archive.eso.org/wdb/wdb/eso/meteo_paranal/query'
@@ -85,8 +84,7 @@ def clean_response(text):
 
 def parse_query_response(response_text):
     cleaned_text = clean_response(response_text)
-    buffer = StringIO(cleaned_text)
-    reader = csv.DictReader(buffer)
+    reader = csv.DictReader(StringIO(cleaned_text))
 
     out = (row for row in reader)
 
