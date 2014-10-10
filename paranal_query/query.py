@@ -10,14 +10,13 @@ from .common import clean_response, safe_float
 from .upload import upload_from_request
 
 
-session = requests.Session()
-
 
 class Query(object):
 
     def __init__(self, query_type):
         self.query_type = query_type
         self.upload_data()
+        self.session = requests.Session()
 
     def upload_data(self):
         if self.query_type.lower() == 'weather':
@@ -51,7 +50,7 @@ class Query(object):
         payload['night'] = str(night if night is not None
                                else datetime.date.today()),
 
-        return session.post(self.ROOT_URL, data=payload)
+        return self.session.post(self.ROOT_URL, data=payload)
 
     def for_date_range(self, start_date, end_date=None):
         payload = self.PAYLOAD.copy()
@@ -60,7 +59,7 @@ class Query(object):
         payload['etime'] = str(end_date if end_date is not None
                                else datetime.date.today())
         payload['endtime'] = '24'
-        return session.post(self.ROOT_URL, data=payload)
+        return self.session.post(self.ROOT_URL, data=payload)
 
     def cast_row(self, row):
         out = {}
