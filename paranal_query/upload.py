@@ -7,7 +7,6 @@ from peewee import (
     Proxy,
     SqliteDatabase,
 )
-from paranal_query.query import Query
 
 database_proxy = Proxy()
 
