@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: tab_tau=True&tab_rfl=True&max_rows_returned=1000000&tab_fwhm=True&tab_interval=True&tab_ra=True&tab_dec=True&night=2011-03-15&tab_airmass=True&wdbo=csv%2Fdownload&tab_tet=True
+    body: max_rows_returned=1000000&tab_dec=True&tab_tet=True&wdbo=csv%2Fdownload&tab_tau=True&tab_airmass=True&tab_ra=True&tab_rfl=True&tab_interval=True&night=2011-03-15&tab_fwhm=True
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
@@ -532,8 +532,8 @@ interactions:
     headers:
       Connection: [close]
       Content-Type: [text/plain; charset=utf-8]
-      Content-disposition: [attachment; filename=wdb_query_22164_eso.csv]
-      Date: ['Fri, 10 Oct 2014 14:08:06 GMT']
+      Content-disposition: [attachment; filename=wdb_query_23270_eso.csv]
+      Date: ['Fri, 10 Oct 2014 14:57:49 GMT']
       Server: [Apache]
       Transfer-Encoding: [chunked]
     status: {code: 200, message: OK}

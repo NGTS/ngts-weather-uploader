@@ -4,9 +4,10 @@ import pytest
 import vcr
 from contextlib import contextmanager
 
+
 @contextmanager
-def cassette():
-    with vcr.use_cassette('testing/fixtures/weather.yaml'):
+def cassette(cassette_name):
+    with vcr.use_cassette('testing/fixtures/{}.yaml'.format(cassette_name)):
         yield
 
 
@@ -18,7 +19,7 @@ def query_instance():
 @pytest.fixture
 def query_response(query_instance):
     yesterday = datetime.date.today() - datetime.timedelta(days=1)
-    with cassette():
+    with cassette('weather_single_night'):
         return query_instance.for_night()
 
 
@@ -30,8 +31,9 @@ def parsed(query_response):
 def test_query_for_night_status(query_response):
     assert query_response.status_code == 200
 
+
 def test_query_classmethod():
-    with cassette():
+    with cassette('weather_single_night'):
         assert Query.query_for_night('weather').status_code == 200
 
 
