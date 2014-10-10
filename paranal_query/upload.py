@@ -4,14 +4,34 @@ import pw_database_url as db_uri
 database_proxy = peewee.Proxy()
 
 
-class BaseModel(peewee.Model):
+def build_database():
+    config = db_uri.config()
+    if 'sqlite' in config['engine'].lower():
+        return build_sqlite_database(config)
+    else:
+        return build_mysql_database(config)
+
+
+def build_sqlite_database(config):
+    from peewee import SqliteDatabase
+    return SqliteDatabase(config['name'])
+
+
+def build_mysql_database(config):
+    from peewee import MySQLDatabase
+    return MySQLDatabase(
+        host=config['host'],
+        database=config['name'],
+        user=config['user'],
+        port=config['port'],
+        password=config['password'],
+    )
+
+
+class Measurement(peewee.Model):
 
     class Meta(object):
         database = database_proxy
-
-
-class Measurement(BaseModel):
-    pass
 
 
 database = peewee.SqliteDatabase('/tmp/test.db')
