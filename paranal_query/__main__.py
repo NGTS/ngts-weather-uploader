@@ -7,7 +7,7 @@ import argparse
 
 
 def main():
-    args = parse_args()
+    Query.upload_from_args(parse_args())
 
 
 def parse_args():
