@@ -1,5 +1,6 @@
 from functools import partial
 import datetime
+from dateutil.parser import parse as dateutil_parse
 
 
 def clean_response(text):
@@ -13,7 +14,7 @@ def to_datetime(s):
 
 
 def parse_date(s):
-    return datetime.datetime.strptime(s, '%Y-%m-%d').date()
+    return dateutil_parse(s).date()
 
 
 def safe_cast(value, caster):
