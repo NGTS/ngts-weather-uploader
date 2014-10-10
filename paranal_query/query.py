@@ -6,12 +6,14 @@ if sys.version_info.major >= 3:
 else:
     from StringIO import StringIO
 import csv
-from .common import clean_response, safe_float
+from .common import clean_response, safe_float, parse_date
 from .upload import upload_from_request
 
 
 
 class Query(object):
+
+    QUERY_TYPES = ['weather', 'ambient']
 
     def __init__(self, query_type):
         self.query_type = query_type
@@ -96,3 +98,12 @@ class Query(object):
         upload_from_request(self, response)
 
         return self
+
+    @classmethod
+    def upload_from_args(cls, args):
+        for key in cls.QUERY_TYPES:
+            cls(key).upload(
+                night=parse_date(args.night),
+                start_date=parse_date(args.start_date),
+                end_date=parse_date(args.end_date)
+            )
