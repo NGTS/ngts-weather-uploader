@@ -27,6 +27,8 @@ def build_mysql_database(config):
         password=config['password'],
     )
 
+database_proxy = peewee.Proxy()
+
 
 class Measurement(peewee.Model):
 
@@ -50,6 +52,8 @@ def upload_from_request(query, r):
         column.add_to_class(Measurement, column_name)
 
     Measurement._meta.db_table = 'paranal_{}'.format(query.query_type)
+    database = build_database()
+    database_proxy.initialize(database)
     database.create_tables([Measurement], safe=True)
 
     data = query.parse_query_response(r.text)
