@@ -1,19 +1,5 @@
-from functools import partial
-import datetime
+from .common import safe_int, to_datetime
 
-
-def to_datetime(s):
-    return datetime.datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
-
-
-def safe_cast(value, caster):
-    try:
-        return caster(value)
-    except ValueError:
-        return None
-
-safe_float = partial(safe_cast, caster=float)
-safe_int = partial(safe_cast, caster=int)
 
 ROOT_URL = 'http://archive.eso.org/wdb/wdb/eso/meteo_paranal/query'
 

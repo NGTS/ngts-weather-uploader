@@ -6,11 +6,10 @@ if sys.version_info.major >= 3:
 else:
     from StringIO import StringIO
 import csv
-from .common import clean_response
+from .common import clean_response, safe_float
 
 
 session = requests.Session()
-
 
 
 class Query(object):
@@ -24,13 +23,11 @@ class Query(object):
             from .weather import (ROOT_URL,
                                   COLUMN_NAME_MAP,
                                   COLUMN_DATA_CASTERS,
-                                  safe_float,
                                   PAYLOAD)
         elif self.query_type.lower() == 'ambient':
             from .ambient import (ROOT_URL,
                                   COLUMN_NAME_MAP,
                                   COLUMN_DATA_CASTERS,
-                                  safe_float,
                                   PAYLOAD)
 
         else:
@@ -41,7 +38,6 @@ class Query(object):
         self.ROOT_URL = ROOT_URL
         self.COLUMN_NAME_MAP = COLUMN_NAME_MAP
         self.COLUMN_DATA_CASTERS = COLUMN_DATA_CASTERS
-        self.safe_float = safe_float
         self.PAYLOAD = PAYLOAD
 
     def query_for_night(self, night=None):
@@ -58,7 +54,7 @@ class Query(object):
             if key in self.COLUMN_DATA_CASTERS:
                 casted_value = self.COLUMN_DATA_CASTERS[key](value)
             else:
-                casted_value = self.safe_float(value)
+                casted_value = safe_float(value)
             out[key] = casted_value
         return out
 
