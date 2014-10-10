@@ -3,13 +3,16 @@
 
 from paranal_query.query import Query
 import datetime
+import argparse
 
 
 def main():
-    start_date = datetime.date(2012, 2, 3)
-    end_date = datetime.date(2012, 2, 5)
-    for database in ['weather', 'ambient']:
-        query = Query(database).upload(start_date=start_date, end_date=end_date)
+    args = parse_args()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    return parser.parse_args()
 
 
 if __name__ == '__main__':
