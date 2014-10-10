@@ -2,6 +2,12 @@ from paranal_query.query import Query
 import pytest
 import datetime
 import vcr
+from contextlib import contextmanager
+
+@contextmanager
+def cassette():
+    with vcr.use_cassette('testing/fixtures/ambient.yaml'):
+        yield
 
 
 @pytest.fixture
@@ -12,7 +18,7 @@ def query_instance():
 @pytest.fixture
 def query_response(query_instance):
     d = datetime.date(2011, 3, 15)
-    with vcr.use_cassette('testing/fixtures/ambient.yaml'):
+    with cassette():
         return query_instance.for_night(d)
 
 

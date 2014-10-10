@@ -2,6 +2,12 @@ from paranal_query.query import Query
 import datetime
 import pytest
 import vcr
+from contextlib import contextmanager
+
+@contextmanager
+def cassette():
+    with vcr.use_cassette('testing/fixtures/weather.yaml'):
+        yield
 
 
 @pytest.fixture
@@ -12,7 +18,7 @@ def query_instance():
 @pytest.fixture
 def query_response(query_instance):
     yesterday = datetime.date.today() - datetime.timedelta(days=1)
-    with vcr.use_cassette('testing/fixtures/weather.yaml'):
+    with cassette():
         return query_instance.for_night()
 
 
