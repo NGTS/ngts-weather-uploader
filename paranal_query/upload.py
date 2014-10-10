@@ -1,17 +1,10 @@
-from peewee import (
-    DateTimeField,
-    FloatField,
-    IntegerField,
-    IntegrityError,
-    Model,
-    Proxy,
-    SqliteDatabase,
-)
+import peewee
+import pw_database_url as db_uri
 
-database_proxy = Proxy()
+database_proxy = peewee.Proxy()
 
 
-class BaseModel(Model):
+class BaseModel(peewee.Model):
 
     class Meta(object):
         database = database_proxy
@@ -21,18 +14,18 @@ class Measurement(BaseModel):
     pass
 
 
-database = SqliteDatabase('/tmp/test.db')
+database = peewee.SqliteDatabase('/tmp/test.db')
 database_proxy.initialize(database)
 
 
 def upload_from_request(query, r):
     for column_name in query.COLUMN_NAME_MAP.values():
         if column_name == 'night':
-            column = DateTimeField(null=False, index=True, unique=True)
+            column = peewee.DateTimeField(null=False, index=True, unique=True)
         elif column_name == 'interval':
-            column = IntegerField()
+            column = peewee.IntegerField()
         else:
-            column = FloatField(null=True)
+            column = peewee.FloatField(null=True)
 
         column.add_to_class(Measurement, column_name)
 
@@ -44,5 +37,5 @@ def upload_from_request(query, r):
         for entry in data:
             try:
                 Measurement.create(**entry)
-            except IntegrityError:
+            except peewee.IntegrityError:
                 pass
