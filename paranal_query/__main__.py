@@ -4,10 +4,22 @@
 from paranal_query.query import Query
 import datetime
 import argparse
+import os
 
 
 def main():
+    check_database_url()
     Query.upload_from_args(parse_args())
+
+
+def check_database_url():
+    if 'DATABASE_URL' not in os.environ:
+        msg = '''Database must be configured with DATABASE_URL environment
+variable, e.g.
+
+    * sqlite:////tmp/test.db
+    * mysql://<user>@<host>/<dbname>'''
+        raise RuntimeError(msg)
 
 
 def parse_args():
@@ -21,7 +33,6 @@ def parse_args():
     return args
 
 
-
 def validate_args(args):
     '''
     Ensure either:
@@ -32,12 +43,11 @@ def validate_args(args):
         * start_date and end_date and not night
     '''
     if ((not args.night and not args.start_date and not args.end_date) or
-        (args.night and not args.start_date and not args.end_date) or
-        (args.start_date and not args.night)):
+            (args.night and not args.start_date and not args.end_date) or
+            (args.start_date and not args.night)):
         return
     else:
         raise RuntimeError("Invalid date combination passed")
-
 
 
 if __name__ == '__main__':
