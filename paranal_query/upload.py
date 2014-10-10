@@ -36,10 +36,6 @@ class Measurement(peewee.Model):
         database = database_proxy
 
 
-database = peewee.SqliteDatabase('/tmp/test.db')
-database_proxy.initialize(database)
-
-
 def upload_from_request(query, r):
     for column_name in query.COLUMN_NAME_MAP.values():
         if column_name == 'night':
