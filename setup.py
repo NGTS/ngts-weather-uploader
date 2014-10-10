@@ -20,4 +20,7 @@ setup(
                 package_name=package_name),
         ],
     },
+    package_data={
+        package_name: ['logging_config.json'.format(package_name),]
+    },
 )
