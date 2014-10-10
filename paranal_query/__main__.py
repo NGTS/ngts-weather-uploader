@@ -8,8 +8,9 @@ import os
 
 
 def main():
+    args = parse_args()
     check_database_url()
-    Query.upload_from_args(parse_args())
+    Query.upload_from_args(args)
 
 
 def check_database_url():
