@@ -23,7 +23,7 @@ def build_mysql_database(config):
         host=config['host'],
         database=config['name'],
         user=config['user'],
-        port=config['port'],
+        port=config['port'] if config['port'] else 3306,
         password=config['password'],
     )
 
