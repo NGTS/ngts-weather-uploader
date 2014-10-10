@@ -11,3 +11,4 @@ six==1.8.0
 urllib3==1.7.1
 vcrpy==1.1.2
 wrapt==1.9.0
+python-dateutil==2.2

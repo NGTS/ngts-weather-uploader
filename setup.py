@@ -11,6 +11,7 @@ setup(
     install_requires=[
         'requests',
         'peewee',
+        'python-dateutil',
     ],
     entry_points={
         'console_scripts': [
