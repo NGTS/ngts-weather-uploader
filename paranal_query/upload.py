@@ -44,13 +44,13 @@ class BaseModel(peewee.Model):
 class WeatherMeasurement(BaseModel):
 
     class Meta(object):
-        db_table = 'paranal_weather'
+        db_table = 'eso_paranal_weather'
 
 
 class AmbientMeasurement(BaseModel):
 
     class Meta(object):
-        db_table = 'paranal_ambient'
+        db_table = 'eso_paranal_ambient'
 
 
 for column_name in paranal_weather.COLUMN_NAME_MAP.values():
