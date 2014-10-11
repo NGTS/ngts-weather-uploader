@@ -9,9 +9,9 @@ def test_max_rows_warning(mock_build_database, mock_ambient, caplog):
 
     query.query_type = 'ambient'
     query.max_rows = 2
-    query.parse_query_response.return_value = [
+    query.parse_query_response.return_value = iter([
         {'a': 10}
-    ] * 100
+    ] * 100)
 
     upload_from_request(query, response)
 
