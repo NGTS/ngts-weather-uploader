@@ -7,7 +7,7 @@ else:
     from StringIO import StringIO
 import csv
 from .common import clean_response, safe_float, parse_date
-from .upload import upload_from_request
+from .upload import Uploader
 from .logger import logger
 
 
@@ -101,7 +101,7 @@ class Query(object):
         else:
             response = self.for_night(night)
 
-        upload_from_request(self, response)
+        Uploader.upload_from_request(self, response)
 
         return self
 

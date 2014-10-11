@@ -75,29 +75,33 @@ for column_name in paranal_ambient.COLUMN_NAME_MAP.values():
     column.add_to_class(AmbientMeasurement, column_name)
 
 
-def upload_from_request(query, r):
-    logger.debug('Initialising database tables')
+class Uploader(object):
 
-    database = build_database()
-    database_proxy.initialize(database)
-    database.create_tables([WeatherMeasurement, AmbientMeasurement], safe=True)
+    @classmethod
+    def upload_from_request(cls, query, r):
+        logger.debug('Initialising database tables')
 
-    if query.query_type.lower() == 'weather':
-        model = WeatherMeasurement
-    elif query.query_type.lower() == 'ambient':
-        model = AmbientMeasurement
+        database = build_database()
+        database_proxy.initialize(database)
+        database.create_tables(
+            [WeatherMeasurement, AmbientMeasurement], safe=True)
 
-    data = query.parse_query_response(r.text)
-    with database.transaction():
-        row_count = 0
-        for entry in data:
-            try:
-                model.create(**entry)
-            except peewee.IntegrityError:
-                pass
-            finally:
-                row_count += 1
+        if query.query_type.lower() == 'weather':
+            model = WeatherMeasurement
+        elif query.query_type.lower() == 'ambient':
+            model = AmbientMeasurement
 
-        if row_count >= query.max_rows:
-            logger.warning('Not all rows uploaded, consider querying for a '
-                           'smaller date range or raising `query.max_rows`')
+        data = query.parse_query_response(r.text)
+        with database.transaction():
+            row_count = 0
+            for entry in data:
+                try:
+                    model.create(**entry)
+                except peewee.IntegrityError:
+                    pass
+                finally:
+                    row_count += 1
+
+            if row_count >= query.max_rows:
+                logger.warning('Not all rows uploaded, consider querying for a '
+                               'smaller date range or raising `query.max_rows`')

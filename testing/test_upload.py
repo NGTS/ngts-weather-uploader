@@ -1,5 +1,5 @@
 import mock
-from paranal_query.upload import upload_from_request
+from paranal_query.upload import Uploader
 
 @mock.patch('paranal_query.upload.build_database')
 @mock.patch('paranal_query.upload.AmbientMeasurement')
@@ -13,7 +13,7 @@ def test_max_rows_warning(_, __, caplog):
         {'a': 10}
     ] * 100)
 
-    upload_from_request(query, response)
+    Uploader.upload_from_request(query, response)
 
     warning_log = [record for record in caplog.records()
                    if record.levelname == 'WARNING'][0]
