@@ -78,30 +78,39 @@ for column_name in paranal_ambient.COLUMN_NAME_MAP.values():
 class Uploader(object):
 
     @classmethod
-    def upload_from_request(cls, query, r):
-        logger.debug('Initialising database tables')
+    def upload_from_request(cls, query, request):
+        return cls(query, request).upload()
 
-        database = build_database()
-        database_proxy.initialize(database)
-        database.create_tables(
+    def __init__(self, query, request):
+        self.query = query
+        self.request = request
+
+        self.build_database()
+
+    def build_database(self):
+        logger.debug('Initialising database tables')
+        self.database = build_database()
+        database_proxy.initialize(self.database)
+        self.database.create_tables(
             [WeatherMeasurement, AmbientMeasurement], safe=True)
 
-        if query.query_type.lower() == 'weather':
-            model = WeatherMeasurement
-        elif query.query_type.lower() == 'ambient':
-            model = AmbientMeasurement
+        if self.query.query_type.lower() == 'weather':
+            self.model = WeatherMeasurement
+        elif self.query.query_type.lower() == 'ambient':
+            self.model = AmbientMeasurement
 
-        data = query.parse_query_response(r.text)
-        with database.transaction():
+    def upload(self):
+        data = self.query.parse_query_response(self.request.text)
+        with self.database.transaction():
             row_count = 0
             for entry in data:
                 try:
-                    model.create(**entry)
+                    self.model.create(**entry)
                 except peewee.IntegrityError:
                     pass
                 finally:
                     row_count += 1
 
-            if row_count >= query.max_rows:
+            if row_count >= self.query.max_rows:
                 logger.warning('Not all rows uploaded, consider querying for a '
                                'smaller date range or raising `query.max_rows`')
