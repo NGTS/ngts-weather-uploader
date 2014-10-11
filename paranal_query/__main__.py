@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from paranal_query.query import Query
-import datetime
 import argparse
 import os
 
