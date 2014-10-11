@@ -3,7 +3,7 @@ from paranal_query.upload import upload_from_request
 
 @mock.patch('paranal_query.upload.build_database')
 @mock.patch('paranal_query.upload.AmbientMeasurement')
-def test_max_rows_warning(mock_build_database, mock_ambient, caplog):
+def test_max_rows_warning(_, __, caplog):
     query = mock.MagicMock()
     response = mock.MagicMock()
 
