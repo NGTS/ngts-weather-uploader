@@ -18,10 +18,15 @@ class Query(object):
     def __init__(self, query_type):
         self.query_type = query_type
         self.upload_data()
-        self.session = requests.Session()
+        self.session = self.setup_session()
         self.max_rows = 1000000
 
         logger.info('Constructing `%s` query', self.query_type)
+
+    def setup_session(self):
+        logger.info('Setting up requests session')
+        s = requests.Session()
+        return s
 
     def upload_data(self):
         if self.query_type.lower() == 'weather':
