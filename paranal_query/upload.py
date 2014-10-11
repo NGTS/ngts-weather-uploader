@@ -89,8 +89,15 @@ def upload_from_request(query, r):
 
     data = query.parse_query_response(r.text)
     with database.transaction():
+        row_count = 0
         for entry in data:
             try:
                 model.create(**entry)
             except peewee.IntegrityError:
                 pass
+            finally:
+                row_count += 1
+
+        if row_count >= query.max_rows:
+            logger.warning('Not all rows uploaded, consider querying for a '
+                           'smaller date range or raising `query.max_rows`')
