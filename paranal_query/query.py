@@ -14,6 +14,7 @@ from .logger import logger
 class Query(object):
 
     QUERY_TYPES = ['weather', 'ambient']
+    MAX_ROWS = 1000000
 
     def __init__(self, query_type):
         self.query_type = query_type
@@ -48,6 +49,7 @@ class Query(object):
         night = night if night is not None else datetime.date.today()
         payload = self.PAYLOAD.copy()
         payload['night'] = str(night),
+        payload['max_rows_returned'] = self.MAX_ROWS
         logger.info('Querying for %s', night)
 
         return self.send_request(payload)

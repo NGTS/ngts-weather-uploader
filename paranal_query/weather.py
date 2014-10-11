@@ -35,7 +35,6 @@ COLUMN_DATA_CASTERS = {
 
 PAYLOAD = {
     'wdbo': 'csv/download',
-    'max_rows_returned': 1000000,
 }
 
 fields = [
