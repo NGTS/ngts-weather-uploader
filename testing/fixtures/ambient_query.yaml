@@ -1,0 +1,26 @@
+interactions:
+- request:
+    body: tab_rfl=True&tab_tet=True&tab_ra=True&night=2014-10-12&tab_dec=True&max_rows_returned=1000000&tab_interval=True&wdbo=csv%2Fdownload&tab_airmass=True&tab_fwhm=True&tab_tau=True
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['175']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-Agent: ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101
+          Firefox/32.0']
+    method: POST
+    uri: http://archive.eso.org/wdb/wdb/eso/ambient_paranal/query
+  response:
+    body: {string: "\uFEFF\n# No data returned !\n# Please go back to the query form
+        and try different constraints.\n# \n# \n#\n# A total of 0 records were found
+        matching the provided criteria.\n#"}
+    headers:
+      Connection: [close]
+      Content-Type: [text/plain; charset=utf-8]
+      Content-disposition: [attachment; filename=wdb_query_5087_eso.csv]
+      Date: ['Sun, 12 Oct 2014 11:06:37 GMT']
+      Server: [Apache]
+      Transfer-Encoding: [chunked]
+    status: {code: 200, message: OK}
+version: 1

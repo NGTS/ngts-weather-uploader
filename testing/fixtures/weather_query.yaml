@@ -1,0 +1,26 @@
+interactions:
+- request:
+    body: wdbo=csv%2Fdownload&tab_wd1=True&tab_wd2=True&tab_dul1=True&tab_t1=True&max_rows_returned=1000000&tab_rh2=True&tab_pr=True&tab_dus2=True&tab_wsu=True&tab_t3=True&tab_ws2=True&tab_prq=True&tab_rh1=True&tab_dus1=True&tab_ws1=True&tab_interval=True&tab_td2=True&tab_dul2=True&tab_td1=True&tab_wsw=True&tab_t2=True&tab_wsv=True&night=2014-10-12
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['340']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-Agent: ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101
+          Firefox/32.0']
+    method: POST
+    uri: http://archive.eso.org/wdb/wdb/eso/meteo_paranal/query
+  response:
+    body: {string: "\uFEFF\n# No data returned !\n# Please go back to the query form
+        and try different constraints.\n# \n# \n#\n# A total of 0 records were found
+        matching the provided criteria.\n#"}
+    headers:
+      Connection: [close]
+      Content-Type: [text/plain; charset=utf-8]
+      Content-disposition: [attachment; filename=wdb_query_4611_eso.csv]
+      Date: ['Sun, 12 Oct 2014 10:44:47 GMT']
+      Server: [Apache]
+      Transfer-Encoding: [chunked]
+    status: {code: 200, message: OK}
+version: 1

@@ -126,3 +126,23 @@ class Query(object):
                 start_date=parse_date(args.start_date),
                 end_date=parse_date(args.end_date)
             )
+
+
+class WeatherQuery(Query):
+
+    def __init__(self):
+        super(WeatherQuery, self).__init__('weather')
+
+    @classmethod
+    def query_for_night(cls, night=None):
+        return Query.query_for_night('weather', night)
+
+
+class AmbientQuery(Query):
+
+    def __init__(self):
+        super(AmbientQuery, self).__init__('ambient')
+
+    @classmethod
+    def query_for_night(cls, night=None):
+        return Query.query_for_night('ambient', night)
