@@ -101,6 +101,7 @@ class Uploader(object):
 
     def upload(self):
         data = self.query.parse_query_response(self.request.text)
+        logger.info('Uploading data to database')
         with self.database.transaction():
             row_count = 0
             for entry in data:
