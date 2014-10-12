@@ -25,8 +25,8 @@ variable, e.g.
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--night', required=False)
-    parser.add_argument('--start_date', required=False)
-    parser.add_argument('--end_date', required=False)
+    parser.add_argument('--start-date', required=False)
+    parser.add_argument('--end-date', required=False)
     args = parser.parse_args()
 
     validate_args(args)
