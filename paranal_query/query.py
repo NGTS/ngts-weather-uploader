@@ -119,6 +119,12 @@ class Query(object):
         return self.for_night(night)
 
     @classmethod
+    def upload_for(cls, query_type, night=None, start_date=None, end_date=None):
+        self = cls(query_type)
+        self.upload(night, start_date, end_date)
+        return self
+
+    @classmethod
     def upload_from_args(cls, args):
         for key in cls.QUERY_TYPES:
             cls(key).upload(
@@ -137,6 +143,10 @@ class WeatherQuery(Query):
     def query_for_night(cls, night=None):
         return Query.query_for_night('weather', night)
 
+    @classmethod
+    def upload_for(cls, *args, **kwargs):
+        return Query.upload_for('weather', *args, **kwargs)
+
 
 class AmbientQuery(Query):
 
@@ -146,3 +156,7 @@ class AmbientQuery(Query):
     @classmethod
     def query_for_night(cls, night=None):
         return Query.query_for_night('ambient', night)
+
+    @classmethod
+    def upload_for(cls, *args, **kwargs):
+        return Query.upload_for('ambient', *args, **kwargs)
