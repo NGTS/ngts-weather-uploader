@@ -38,6 +38,13 @@ def test_query_for_night_status(query_response):
     assert query_response.status_code == 200
 
 
+def test_bad_query_type():
+    with pytest.raises(RuntimeError) as err:
+        Query('bad_query_type')
+
+    assert 'Unknown query type' in str(err)
+
+
 def test_query_classmethod():
     with cassette('weather_single_night'):
         assert Query.query_for_night('weather').status_code == 200
