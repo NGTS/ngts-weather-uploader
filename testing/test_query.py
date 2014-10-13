@@ -90,6 +90,13 @@ def test_upload_argument_dispatch(mock_uploader):
     assert 'Cannot specify' in str(err)
 
 
+def test_upload_for():
+    Query.upload = mock.MagicMock()
+    night = mock.MagicMock()
+    query = Query.upload_for('weather', night=night)
+    Query.upload.assert_called_with(night, None, None)
+
+
 def test_cast_data_types(query_instance):
     data = [{
         'night': '2014-10-09 12:00:33',
