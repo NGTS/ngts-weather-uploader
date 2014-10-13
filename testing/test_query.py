@@ -2,6 +2,7 @@ from paranal_query.query import Query
 import datetime
 import pytest
 import vcr
+import mock
 from contextlib import contextmanager
 
 
@@ -67,6 +68,26 @@ def test_rename_columns(query_instance):
         'wind_speed_u': 1,
         'dewtemp_2m': 2,
     }]
+
+
+@mock.patch('paranal_query.query.Uploader')
+def test_upload_argument_dispatch(mock_uploader):
+    query = Query('weather')
+    query.for_date_range = mock.MagicMock()
+    query.for_night = mock.MagicMock()
+
+    night = mock.MagicMock()
+    query.upload(night=night)
+    query.for_night.assert_called_with(night)
+
+    start_date, end_date = mock.MagicMock(), mock.MagicMock()
+    query.upload(start_date=start_date, end_date=end_date)
+    query.for_date_range.assert_called_with(start_date, end_date)
+
+    with pytest.raises(RuntimeError) as err:
+        query.upload(night=night, start_date=start_date, end_date=end_date)
+
+    assert 'Cannot specify' in str(err)
 
 
 def test_cast_data_types(query_instance):

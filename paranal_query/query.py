@@ -104,6 +104,9 @@ class Query(object):
         return self.cast_data_types(self.rename_columns(out))
 
     def upload(self, night=None, start_date=None, end_date=None):
+        if night is not None and start_date is not None:
+            raise RuntimeError('Cannot specify `night` and `start_date`')
+
         if start_date is not None:
             response = self.for_date_range(start_date, end_date)
         else:
