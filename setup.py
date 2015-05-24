@@ -18,6 +18,8 @@ setup(
         'console_scripts': [
             'upload_paranal_metadata.py = {package_name}.__main__:main'.format(
                 package_name=package_name),
+            'run_on_yesterday.py = {package_name}.run_on_yesterday:main'.format(
+                package_name=package_name),
         ],
     },
     package_data={
