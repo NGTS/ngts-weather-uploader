@@ -19,9 +19,9 @@ class NullArgs(object):
 def main():
     args = parse_args()
     today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
-    dt = datetime.datetime.combine(yesterday,
-            datetime.datetime.min.time())
+
+    # Subtract two days to get the previous night
+    yesterday = today - datetime.timedelta(days=2)
     query_args = NullArgs(
             night=str(yesterday),
             start_date=None,
