@@ -21,11 +21,14 @@ def main():
     today = datetime.date.today()
 
     # Subtract two days to get the previous night
-    yesterday = today - datetime.timedelta(days=2)
+    yesterday = today - datetime.timedelta(days=1)
+    start = datetime.datetime.combine(yesterday, datetime.time.min)
+    end = datetime.datetime.combine(yesterday, datetime.time.max)
+
     query_args = NullArgs(
-            night=str(yesterday),
-            start_date=None,
-            end_date=None)
+            night=None,
+            start_date=str(start),
+            end_date=str(end))
     Query.upload_from_args(query_args)
 
 def parse_args():
