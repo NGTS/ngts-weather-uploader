@@ -2,7 +2,6 @@ PyYAML==3.11
 autopep8==1.0.4
 contextlib2==0.4.0
 mock==1.0.1
-peewee==2.3.3
 pep8==1.5.7
 py==1.4.25
 pytest==2.6.3
@@ -12,5 +11,5 @@ urllib3==1.7.1
 vcrpy==1.1.2
 wrapt==1.9.0
 python-dateutil==2.2
-pw-database-url==0.2.0
 pytest-capturelog==0.7
+PyMySQL==0.6.6

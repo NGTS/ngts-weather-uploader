@@ -8,18 +8,7 @@ import os
 
 def main():
     args = parse_args()
-    check_database_url()
     Query.upload_from_args(args)
-
-
-def check_database_url():
-    if 'DATABASE_URL' not in os.environ:
-        msg = '''Database must be configured with DATABASE_URL environment
-variable, e.g.
-
-    * sqlite:////tmp/test.db
-    * mysql://<user>@<host>/<dbname>'''
-        raise RuntimeError(msg)
 
 
 def parse_args():

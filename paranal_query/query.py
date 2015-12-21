@@ -7,7 +7,7 @@ else:
     from StringIO import StringIO
 import csv
 from .common import clean_response, safe_float, parse_date
-from .upload import Uploader
+from .upload import PyMySQLUploader
 from .logger import logger
 
 
@@ -15,7 +15,7 @@ class Query(object):
 
     QUERY_TYPES = ['weather', 'ambient']
 
-    def __init__(self, query_type, uploader_class=Uploader):
+    def __init__(self, query_type, uploader_class=PyMySQLUploader):
         self.query_type = query_type
         self.uploader_class = uploader_class
         self.upload_data()

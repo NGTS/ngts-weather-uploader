@@ -17,10 +17,6 @@
         "paranal_weather": {
             "handlers": ["console"],
             "level": "DEBUG"
-        },
-        "peewee": {
-            "handlers": ["console"],
-            "level": "WARNING"
         }
     }
 }
