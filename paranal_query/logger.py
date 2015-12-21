@@ -14,5 +14,6 @@ with open(CONFIG_FILE_PATH) as infile:
     config = json.load(infile)
 
 logging.config.dictConfig(config)
+logging.captureWarnings(True)
 
 logger = logging.getLogger('paranal_weather')
