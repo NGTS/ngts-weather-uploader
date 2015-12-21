@@ -10,9 +10,8 @@ setup(
     packages=find_packages(),
     install_requires=[
         'requests',
-        'peewee',
+        'pymysql',
         'python-dateutil',
-        'pw-database-url',
     ],
     entry_points={
         'console_scripts': [

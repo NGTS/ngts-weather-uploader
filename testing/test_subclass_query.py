@@ -17,7 +17,7 @@ def chosen_date():
     return datetime.date(2013, 1, 1)
 
 
-@mock.patch('paranal_query.query.Uploader')
+@mock.patch('paranal_query.query.PyMySQLUploader')
 def test_weather_constructor(mock_uploader):
     w = WeatherQuery()
 
@@ -32,7 +32,7 @@ def test_weather_class_query_method(chosen_date):
     assert response.status_code == 200
 
 
-@mock.patch('paranal_query.query.Uploader')
+@mock.patch('paranal_query.query.PyMySQLUploader')
 def test_ambient_constructor(chosen_date):
     w = AmbientQuery()
 
