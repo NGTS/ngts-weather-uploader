@@ -130,6 +130,10 @@ class Query(object):
 
     @classmethod
     def upload_from_args(cls, args):
+        PyMySQLUploader.DB_HOST = args.db_host
+        PyMySQLUploader.DB_USER = args.db_user
+        PyMySQLUploader.DB_DBNAME = args.db_name
+
         for key in cls.QUERY_TYPES:
             cls(key).upload(
                 night=parse_date(args.night),
