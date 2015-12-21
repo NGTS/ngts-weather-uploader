@@ -32,8 +32,6 @@ def build_mysql_database(config):
         password=config['password'],
     )
 
-database_proxy = peewee.Proxy()
-
 
 class BaseModel(peewee.Model):
 
