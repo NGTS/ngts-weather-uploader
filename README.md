@@ -33,12 +33,21 @@ pip install --user git+https://github.com/NGTS/ngts-weather-uploader
 Running
 -------
 
-The database to upload to is passed as the environment variable `DATABASE_URL` on the command line, in a format understandable to `peewee`, or `sqlalchemy`. For example:
+The database is specified on the command line, and assumed to be mysql.
+See for example the command line usage for `run_on_yesterday.py`:
 
-```
-DATABASE_URL=sqlite:///db.db upload_paranal_metadata.py --night 20150101
 
-# or
+```sh
+usage: run_on_yesterday.py [-h] [-H DB_HOST] [-U DB_USER] [-D DB_NAME]
+[-v]
 
-DATABASE_URL=mysql://<user>@<host>/<dbname> upload_paranal_metadata.py --start-date 20150101 --end-date 20150201
+optional arguments:
+  -h, --help            show this help message and exit
+  -H DB_HOST, --db-host DB_HOST
+                        Database host (default: ngtsdb)
+  -U DB_USER, --db-user DB_USER
+                        Database host (default: sw)
+  -D DB_NAME, --db-name DB_NAME
+                        Database host (default: ngts_ops)
+  -v, --verbose
 ```
