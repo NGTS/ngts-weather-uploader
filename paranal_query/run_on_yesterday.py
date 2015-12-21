@@ -7,6 +7,7 @@ import datetime
 
 from .query import Query
 from .common import parse_date
+from .logger import logger
 
 class NullArgs(object):
     def __init__(self, **kwargs):
@@ -18,6 +19,9 @@ class NullArgs(object):
 
 def main():
     args = parse_args()
+    if args.verbose:
+        logger.setLevel('DEBUG')
+
     today = datetime.date.today()
 
     # Subtract two days to get the previous night
