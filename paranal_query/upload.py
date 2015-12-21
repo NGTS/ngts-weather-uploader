@@ -19,9 +19,9 @@ class UploaderBase(object):
 
 
 class PyMySQLUploader(UploaderBase):
-    DB_HOST = 'localhost'
-    DB_USER = 'simon'
-    DB_DBNAME = 'test'
+    DB_HOST = 'ngtsdb'
+    DB_USER = 'sw'
+    DB_DBNAME = 'ngts_ops'
 
     AMBIENT_COLUMNS = OrderedDict([
         ('id', 'integer primary key auto_increment'),
