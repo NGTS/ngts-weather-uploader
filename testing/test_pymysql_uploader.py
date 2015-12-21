@@ -13,10 +13,11 @@ def cassette():
         yield
 
 
-@pytest.fixture
+@pytest.yield_fixture
 def connection():
     connection = PyMySQLUploader.connect()
-    return connection
+    yield connection
+    connection.close()
 
 
 def test_it_creates_the_initial_table(connection):

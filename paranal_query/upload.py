@@ -67,7 +67,6 @@ class PyMySQLUploader(UploaderBase):
 
     def __init__(self, query, request):
         self.connection = self.connect()
-        self.cursor = self.connection.cursor()
         super(PyMySQLUploader, self).__init__(query, request)
 
     @classmethod
@@ -80,9 +79,11 @@ class PyMySQLUploader(UploaderBase):
         for (name, type) in self.COLUMN_NAME_MAP[key].items():
             row = '`{name}` {type}'.format(name=name, type=type)
             column_descriptions.append(row)
-        self.cursor.execute('''create table if not exists {key} (
-            {columns}
-        )'''.format(key=key, columns=','.join(column_descriptions)))
+        with self.connection as cursor:
+            cursor.execute('''create table if not exists {key} (
+                {columns},
+                unique(night)
+            )'''.format(key=key, columns=','.join(column_descriptions)))
 
     def build_database(self):
         logger.debug('Initialising database tables')
@@ -97,6 +98,8 @@ class PyMySQLUploader(UploaderBase):
 
     def upload(self):
         data = self.query.parse_query_response(self.request.text)
+        if not len(data):
+            raise RuntimeError("No data found")
         logger.info('Uploading data to database')
         key_list = self.COLUMN_NAME_MAP[self.upload_table_name]
         keys = [colname for colname in key_list.keys()
@@ -104,13 +107,13 @@ class PyMySQLUploader(UploaderBase):
         colnames = ','.join(['`{}`'.format(key) for key in keys])
         placeholders = ','.join(['%({name})s'.format(name=name)
                                  for name in keys])
-        row_count = 0
-        for entry in data:
-            query = '''
-            insert into {tablename} ({colnames}) values
-            ({placeholders})'''.format(tablename=self.upload_table_name,
-                                       colnames=colnames, placeholders=placeholders)
-            self.cursor.execute(query, entry)
-            row_count += 1
-
-        self.connection.commit()
+        with self.connection as cursor:
+            for entry in data:
+                query = '''
+                insert into {tablename} ({colnames}) values
+                ({placeholders})'''.format(tablename=self.upload_table_name,
+                                        colnames=colnames, placeholders=placeholders)
+                try:
+                    cursor.execute(query, entry)
+                except pymysql.IntegrityError:
+                    logger.debug('Duplicate entry for %s', entry['night'])
