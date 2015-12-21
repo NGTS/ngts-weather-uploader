@@ -12,7 +12,14 @@ def main():
 
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('-H', '--db-host', required=False,
+                        help='Database host', default='ngtsdb')
+    parser.add_argument('-U', '--db-user', required=False,
+                        help='Database host', default='sw')
+    parser.add_argument('-D', '--db-name', required=False,
+                        help='Database host', default='ngts_ops')
     parser.add_argument('--night', required=False)
     parser.add_argument('--start-date', required=False)
     parser.add_argument('--end-date', required=False)
