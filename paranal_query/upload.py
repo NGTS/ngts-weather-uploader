@@ -183,12 +183,34 @@ class PyMySQLUploader(Uploader):
             {columns}
         )'''.format(key=key, columns=','.join(column_descriptions)))
 
-
     def build_database(self):
         logger.debug('Initialising database tables')
         for key in self.COLUMN_NAME_MAP.keys():
             self.construct_single_table(key)
 
+        query_type = self.query.query_type.lower()
+        if query_type == 'ambient':
+            self.upload_table_name = 'eso_paranal_ambient'
+        elif query_type == 'weather':
+            self.upload_table_name = 'eso_paranal_weather'
 
     def upload(self):
-        pass
+        data = self.query.parse_query_response(self.request.text)
+        logger.info('Uploading data to database')
+        key_list = self.COLUMN_NAME_MAP[self.upload_table_name]
+        keys = [colname for colname in key_list.keys()
+                if colname != 'id']
+        colnames = ','.join(['`{}`'.format(key) for key in keys])
+        placeholders = ','.join(['%({name})s'.format(name=name)
+                                 for name in keys])
+        row_count = 0
+        for entry in data:
+            query = '''
+            insert into {tablename} ({colnames}) values
+            ({placeholders})'''.format(tablename=self.upload_table_name,
+                                       colnames=colnames, placeholders=placeholders)
+            print(query)
+            self.cursor.execute(query, entry)
+            row_count += 1
+
+        self.connection.commit()
