@@ -8,15 +8,15 @@
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "level": "DEBUG",
+            "level": "INFO",
             "formatter": "simple",
-            "stream": "ext://sys.stdout"
+            "stream": "ext://sys.stderr"
         }
     },
     "loggers": {
         "paranal_weather": {
             "handlers": ["console"],
-            "level": "DEBUG"
+            "level": "INFO"
         }
     }
 }

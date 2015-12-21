@@ -29,6 +29,7 @@ def main():
         db_host=args.db_host,
         db_user=args.db_user,
         db_name=args.db_name,
+        verbose=args.verbose,
     )
     Query.upload_from_args(query_args)
 
