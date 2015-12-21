@@ -15,8 +15,9 @@ class Query(object):
 
     QUERY_TYPES = ['weather', 'ambient']
 
-    def __init__(self, query_type):
+    def __init__(self, query_type, uploader_class=Uploader):
         self.query_type = query_type
+        self.uploader_class = uploader_class
         self.upload_data()
         self.session = self.setup_session()
         self.max_rows = 1000000
@@ -112,7 +113,7 @@ class Query(object):
         else:
             response = self.for_night(night)
 
-        Uploader.upload_from_request(self, response)
+        self.uploader_class.upload_from_request(self, response)
 
         return self
 

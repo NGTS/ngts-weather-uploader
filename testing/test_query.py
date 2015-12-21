@@ -70,11 +70,12 @@ def test_rename_columns(query_instance):
     }]
 
 
-@mock.patch('paranal_query.query.Uploader')
-def test_upload_argument_dispatch(mock_uploader):
-    query = Query('weather')
+def test_upload_argument_dispatch():
+    uploader_class = mock.MagicMock()
+    query = Query('weather', uploader_class=uploader_class)
     query.for_date_range = mock.MagicMock()
     query.for_night = mock.MagicMock()
+
 
     night = mock.MagicMock()
     query.upload(night=night)
